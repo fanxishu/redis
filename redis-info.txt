@@ -1,0 +1,14 @@
+docker commit redis 10.1.8.16:5000/nl.paas.redis:latest
+docker commit ruby nl.paas.ruby-redis-trib:latest
+
+docker push 10.1.8.16:5000/nl.paas.ruby-redis-trib:latest
+docker push 10.1.8.16:5000/nl.paas.redis:latest
+
+docker run -d -ti -p 8001:8001 -p 18001:18001 -v /home/bdp_pjd/redis/redis-docker-cluster3/8001/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/bdp_pjd/redis/redis-docker-cluster3/8001/data:/data --restart always --name redis-8001 --sysctl net.core.somaxconn=1024 10.1.8.16:5000/nl.paas.redis redis-server /usr/local/etc/redis/redis.conf
+docker run -d -ti -p 8002:8002 -p 18002:18002 -v /home/bdp_pjd/redis/redis-docker-cluster3/8002/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/bdp_pjd/redis/redis-docker-cluster3/8002/data:/data --restart always --name redis-8002 --sysctl net.core.somaxconn=1024 10.1.8.16:5000/nl.paas.redis redis-server /usr/local/etc/redis/redis.conf
+docker run -d -ti -p 8003:8003 -p 18003:18003 -v /home/bdp_pjd/redis/redis-docker-cluster3/8003/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/bdp_pjd/redis/redis-docker-cluster3/8003/data:/data --restart always --name redis-8003 --sysctl net.core.somaxconn=1024 10.1.8.16:5000/nl.paas.redis redis-server /usr/local/etc/redis/redis.conf
+docker run -d -ti -p 8004:8004 -p 18004:18004 -v /home/bdp_pjd/redis/redis-docker-cluster3/8004/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/bdp_pjd/redis/redis-docker-cluster3/8004/data:/data --restart always --name redis-8004 --sysctl net.core.somaxconn=1024 10.1.8.16:5000/nl.paas.redis redis-server /usr/local/etc/redis/redis.conf
+docker run -d -ti -p 8005:8005 -p 18005:18005 -v /home/bdp_pjd/redis/redis-docker-cluster3/8005/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/bdp_pjd/redis/redis-docker-cluster3/8005/data:/data --restart always --name redis-8005 --sysctl net.core.somaxconn=1024 10.1.8.16:5000/nl.paas.redis redis-server /usr/local/etc/redis/redis.conf
+docker run -d -ti -p 8006:8006 -p 18006:18006 -v /home/bdp_pjd/redis/redis-docker-cluster3/8006/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/bdp_pjd/redis/redis-docker-cluster3/8006/data:/data --restart always --name redis-8006 --sysctl net.core.somaxconn=1024 10.1.8.16:5000/nl.paas.redis redis-server /usr/local/etc/redis/redis.conf
+
+echo yes | docker run -i --rm 10.1.8.16:5000/nl.paas.ruby-redis-trib sh -c 'ruby redis-trib.rb create --replicas 1 10.1.8.8:8001 10.1.8.8:8002 10.1.8.8:8003 10.1.8.8:8004 10.1.8.8:8005 10.1.8.8:8006'
